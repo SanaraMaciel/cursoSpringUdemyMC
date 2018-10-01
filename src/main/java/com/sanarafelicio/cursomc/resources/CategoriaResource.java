@@ -3,29 +3,29 @@ package com.sanarafelicio.cursomc.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sanarafelicio.cursomc.domain.Categoria;
+import com.sanarafelicio.cursomc.services.CategoriaService;
 
 @RestController
 @RequestMapping(value="/categorias")
 public class CategoriaResource {
 	
-	@RequestMapping(method=RequestMethod.GET)
-	public List<Categoria> listar() {
+	@Autowired
+	private CategoriaService service;
+	
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public ResponseEntity<?> find(@PathVariable Integer id) {
 		
-		//criando 2 categorias
-		Categoria cat1 = new Categoria(1, "Informática");
-		Categoria cat2 = new Categoria(2, "Escritório");
-		
-		//criando uma lista de Categoria
-		List<Categoria> categoriaList = new ArrayList<>();
-		categoriaList.add(cat1);
-		categoriaList.add(cat2);
-		
-		return categoriaList;
-	}
+		Categoria obj = service.buscar(id);		
+		return ResponseEntity.ok().body(obj);			
+		}
 
 }
