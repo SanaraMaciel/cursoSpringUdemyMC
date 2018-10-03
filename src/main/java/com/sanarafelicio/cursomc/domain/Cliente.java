@@ -14,8 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sanarafelicio.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -32,8 +31,7 @@ public class Cliente implements Serializable{
 	
 	//Associação de Cliente com endereço // referência a associação feita na classe endereço no atributo cliente
 	//fazer a proteção Json Ciclica da forma que de cliente vc "pega" os endereços mas de endereços não se pega o cliente
-	//usando a notação @JsonManagedReference para fazer a proteção cíclica
-	@JsonManagedReference
+	//usando a notação @JsonManagedReference para fazer a proteção cíclica	
 	@OneToMany(mappedBy="cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
@@ -42,7 +40,7 @@ public class Cliente implements Serializable{
 	private Set<String> telefones = new HashSet<>();
 	
 	//Associação de clientes com os pedidos 
-	@JsonBackReference
+	@JsonIgnore
 	@OneToMany(mappedBy="cliente")
 	private List<Pedido> pedidos = new ArrayList<>(); 
 	

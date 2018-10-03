@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Endereco implements Serializable{
@@ -25,8 +25,8 @@ public class Endereco implements Serializable{
 	private String cep;
 	
 	//Associação de endereço com cliente
-	//proteção cíclica Json para dizer que o endereço não pode buscar o cliente
-	@JsonBackReference
+	//proteção cíclica Json para dizer que o endereço não pode buscar o cliente @JsonBackReference removida	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
