@@ -1,10 +1,12 @@
 package com.sanarafelicio.cursomc.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.sanarafelicio.cursomc.domain.Categoria;
 import com.sanarafelicio.cursomc.repositories.CategoriaRepository;
+import com.sanarafelicio.cursomc.services.exceptions.DataIntegrityException;
 import com.sanarafelicio.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -37,6 +39,17 @@ public class CategoriaService {
 	//chamada ao método find para ver se tem a categoria se ñ tiver já lança a excessão 
 		find(obj.getId());
 		return repo.save(obj);
+	}
+	
+	//delete
+	public void delete(Integer id) {
+		find(id);
+		try {
+			repo.delete(id);
+		}catch(DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos"); 
+		}
+		
 	}
 	
 }
