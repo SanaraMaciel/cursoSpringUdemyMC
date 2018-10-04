@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.sanarafelicio.cursomc.domain.Categoria;
+import com.sanarafelicio.cursomc.dto.CategoriaDTO;
 import com.sanarafelicio.cursomc.repositories.CategoriaRepository;
 import com.sanarafelicio.cursomc.services.exceptions.DataIntegrityException;
 import com.sanarafelicio.cursomc.services.exceptions.ObjectNotFoundException;
@@ -64,8 +65,12 @@ public class CategoriaService {
 	//Adicionando Paginação 
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
 		PageRequest pageRequest = new PageRequest(page, linesPerPage,Direction.valueOf(direction),orderBy);
-		return repo.findAll(pageRequest);
-		
+		return repo.findAll(pageRequest);		
+	}
+	
+	//método auxiliar para converter de CategoriaDTO para Categoria instancia uma categoria a partir de um DTO
+	public Categoria fromDTO(CategoriaDTO objDto) {
+		return new Categoria(objDto.getId(), objDto.getNome());
 	}
 	
 }

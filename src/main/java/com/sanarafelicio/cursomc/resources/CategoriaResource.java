@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,8 @@ public class CategoriaResource {
 	
 	//inserir uma categoria
 	@RequestMapping(method=RequestMethod.POST) //@RequestBidy faz o Json ser convertido para obj java
-	public ResponseEntity<Void> insert(@RequestBody Categoria obj){
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto){
+		Categoria obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
 		//pegando o id da categoria q fio inserido adicionar a url e converter pra uri
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -46,7 +49,8 @@ public class CategoriaResource {
 	
 	//Atualizando uma categoria
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Categoria obj,@PathVariable Integer id){
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto,@PathVariable Integer id){
+		Categoria obj = service.fromDTO(objDto);
 		obj.setId(id);
 		obj= service.update(obj);
 		return ResponseEntity.noContent().build();			
