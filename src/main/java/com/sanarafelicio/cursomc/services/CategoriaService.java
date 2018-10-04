@@ -32,4 +32,11 @@ public class CategoriaService {
 		return repo.save(obj);
 	}
 	
+	//update
+	public Categoria update(Categoria obj) {
+	//chamada ao método find para ver se tem a categoria se ñ tiver já lança a excessão 
+		find(obj.getId());
+		return repo.save(obj);
+	}
+	
 }

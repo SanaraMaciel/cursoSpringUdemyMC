@@ -24,7 +24,7 @@ public class CategoriaResource {
 	
 	//pesquisar categoria por id
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id) {
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 		
 		Categoria obj = service.find(id);		
 		return ResponseEntity.ok().body(obj);			
@@ -36,9 +36,15 @@ public class CategoriaResource {
 		obj = service.insert(obj);
 		//pegando o id da categoria q fio inserido adicionar a url e converter pra uri
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).build();
-		
+		return ResponseEntity.created(uri).build();		
 	}
 	
+	//Atualizando uma categoria
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Categoria obj,@PathVariable Integer id){
+		obj.setId(id);
+		obj= service.update(obj);
+		return ResponseEntity.noContent().build();			
+	}
 
 }
