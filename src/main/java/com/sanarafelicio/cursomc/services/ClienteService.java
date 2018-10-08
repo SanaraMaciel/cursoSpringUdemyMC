@@ -40,8 +40,7 @@ public class ClienteService {
 			Cliente newObj = find(obj.getId());
 			//método auxiliar Update Data p/ atualizar os dadso desse nojo obj com base no obj q veio como argumento
 			updateData(newObj, obj);			
-			return repo.save(newObj);
-			
+			return repo.save(newObj);			
 		}
 		
 		//delete
@@ -76,8 +75,7 @@ public class ClienteService {
 		//atualizando os dados do newObj com os dados q vieram do obj
 		private void updateData(Cliente newObj, Cliente obj ) {
 			newObj.setNome(obj.getNome());
-			newObj.setEmail(obj.getEmail());
-			
+			newObj.setEmail(obj.getEmail());			
 		}
 		
 }

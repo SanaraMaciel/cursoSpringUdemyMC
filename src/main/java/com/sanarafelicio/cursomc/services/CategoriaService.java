@@ -42,9 +42,10 @@ public class CategoriaService {
 	
 	//update
 	public Categoria update(Categoria obj) {
-	//chamada ao método find para ver se tem a categoria se ñ tiver já lança a excessão 
-		find(obj.getId());
-		return repo.save(obj);
+		Categoria newObj = find(obj.getId());
+		//método auxiliar Update Data p/ atualizar os dados desse nojo obj com base no obj q veio como argumento
+		updateData(newObj, obj);			
+		return repo.save(newObj);			
 	}
 	
 	//delete
@@ -72,5 +73,11 @@ public class CategoriaService {
 	public Categoria fromDTO(CategoriaDTO objDto) {
 		return new Categoria(objDto.getId(), objDto.getNome());
 	}
+	
+	//método auxiliar Update data para salvar apenas os campos desejados em uma tabela relacionamento
+			//atualizando os dados do newObj com os dados q vieram do obj
+			private void updateData(Categoria newObj, Categoria obj ) {
+				newObj.setNome(obj.getNome());							
+			}
 	
 }
