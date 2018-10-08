@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -32,7 +33,8 @@ public class Cliente implements Serializable{
 	//Associação de Cliente com endereço // referência a associação feita na classe endereço no atributo cliente
 	//fazer a proteção Json Ciclica da forma que de cliente vc "pega" os endereços mas de endereços não se pega o cliente
 	//usando a notação @JsonManagedReference para fazer a proteção cíclica	
-	@OneToMany(mappedBy="cliente")
+	//comportamento em cascata para deleção de endereço ao deletar um cliente
+	@OneToMany(mappedBy="cliente",cascade=CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	@ElementCollection
