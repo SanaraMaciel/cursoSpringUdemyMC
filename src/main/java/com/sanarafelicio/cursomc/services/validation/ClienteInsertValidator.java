@@ -6,12 +6,21 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.sanarafelicio.cursomc.domain.Cliente;
 import com.sanarafelicio.cursomc.domain.enums.TipoCliente;
 import com.sanarafelicio.cursomc.dto.ClienteNewDTO;
+import com.sanarafelicio.cursomc.repositories.ClienteRepository;
 import com.sanarafelicio.cursomc.resources.exception.FieldMessage;
 import com.sanarafelicio.cursomc.services.validation.utils.BR;
 
 public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
+	
+	//injetando o cliente Repository
+	@Autowired
+	private ClienteRepository repo;
+	
 	@Override
 	public void initialize(ClienteInsert ann) {
 	}
@@ -29,6 +38,12 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 		//se o tipo de cliente for pessoa jurídica  e o cnpj não for válido adiciona o erro na lista
 		if(objDto.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCod()) && !BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
 			list.add(new FieldMessage("cpfOuCnpj","CNPJ inválido"));
+		}
+		
+		//validação para testar se email é único
+		Cliente aux = repo.findByEmail(objDto.getEmail());
+		if(aux != null) {
+			list.add(new FieldMessage("email","Email já cadastrado"));
 		}
 
 		for (FieldMessage e : list) {
