@@ -8,53 +8,63 @@ import javax.persistence.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class ItemPedido implements Serializable{
+public class ItemPedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	//A classe itemPedido tem como Id o Id do ItemPedidoPK
-	//Anotadção para o id @EmbeddedId signiica que é um id embutido para um tipo auxiliar
-	//@JsonIgnore é para o id não ser serializado
+	// A classe itemPedido tem como Id o Id do ItemPedidoPK
+	// Anotadção para o id @EmbeddedId signiica que é um id embutido para um tipo
+	// auxiliar
+	// @JsonIgnore é para o id não ser serializado
 	@JsonIgnore
 	@EmbeddedId
-	private ItemPedidoPK id = new ItemPedidoPK();	
+	private ItemPedidoPK id = new ItemPedidoPK();
 
 	private Double desconto;
 	private Integer quantidade;
 	private Double preco;
-	
-	//constructors
+
+	// constructors
 	public ItemPedido() {
-		
+
 	}
 
 	public ItemPedido(Pedido pedido, Produto produto, Double desconto, Integer quantidade, Double preco) {
 		super();
-		id.setPedido(pedido); 
+		id.setPedido(pedido);
 		id.setProduto(produto);
 		this.desconto = desconto;
 		this.quantidade = quantidade;
 		this.preco = preco;
 	}
-	
-	//método para calcular o subTotal do pedido
+
+	// método para calcular o subTotal do pedido
 	public double getSubTotal() {
 		return (preco - desconto) * quantidade;
 	}
-	
-	
-	//getters para acessar diretamente o pedido e produto
-	//colocar json ignore para não fazer referência ciclica
+
+	// getters para acessar diretamente o pedido e produto
+	// colocar json ignore para não fazer referência ciclica
 	@JsonIgnore
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
-	
-	//não colocar JsonIgnore neste para ele mostrar o produto
+
+	// setter pedido
+	public void setPedido(Pedido pedido) {
+		id.setPedido(pedido);
+	}
+
+	// não colocar JsonIgnore neste para ele mostrar o produto
 	public Produto getProduto() {
 		return id.getProduto();
-	}	
-	
-	//getters and setters
+	}
+
+	// setter produto
+	public void setProduto(Produto produto) {
+		id.setProduto(produto);
+	}
+
+	// getters and setters
 	public ItemPedidoPK getId() {
 		return id;
 	}
@@ -111,7 +121,5 @@ public class ItemPedido implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }
