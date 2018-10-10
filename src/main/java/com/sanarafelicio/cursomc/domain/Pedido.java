@@ -63,6 +63,19 @@ public class Pedido implements Serializable{
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
+	//método para calcular o total do pedido com base no subTotal de itemPedido
+	public double getValorTotal() {
+		double soma = 0;
+		for(ItemPedido ip : itens) {
+			soma = soma + ip.getSubTotal();
+		}
+		return soma;
+		
+		// ou usar lambda no lugar do for como abaixo: 
+		// itens.stream().mapToDouble(x -> x.getSubtotal()).sum();
+		
+	}
+	
 	public Integer getId() {
 		return id;
 	}
