@@ -10,9 +10,11 @@ import com.sanarafelicio.cursomc.domain.ItemPedido;
 import com.sanarafelicio.cursomc.domain.PagamentoComBoleto;
 import com.sanarafelicio.cursomc.domain.Pedido;
 import com.sanarafelicio.cursomc.domain.enums.EstadoPagamento;
+import com.sanarafelicio.cursomc.repositories.ClienteRepository;
 import com.sanarafelicio.cursomc.repositories.ItemPedidoRepository;
 import com.sanarafelicio.cursomc.repositories.PagamentoRepository;
 import com.sanarafelicio.cursomc.repositories.PedidoRepository;
+import com.sanarafelicio.cursomc.repositories.ProdutoRepository;
 import com.sanarafelicio.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -37,6 +39,12 @@ public class PedidoService {
 	private ItemPedidoRepository itemPedidoRepository;
 	
 	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ProdutoRepository produtoRepository;
+	
 	public Pedido find(Integer id) {
 		Pedido obj = repo.findOne(id);
 		if (obj == null) {
@@ -46,9 +54,11 @@ public class PedidoService {
 		return obj;		
 	}
 	
+	@Transactional
 	public Pedido insert(Pedido obj){
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setCliente(clienteRepository.findOne(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
 		if(obj.getPagamento() instanceof PagamentoComBoleto){
@@ -62,11 +72,13 @@ public class PedidoService {
 		//salvar o item de pedido
 		for(ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoRepository.findOne(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			//associar esse produto ao pedido no obj
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.save(obj.getItens());
+		System.out.println(obj);
 		return obj;
 	}
 	
