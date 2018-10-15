@@ -129,7 +129,7 @@ public class DBService {
 		cidadeRepository.save(Arrays.asList(c1, c2, c3));
 
 		// Instanciação de cliente
-		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		Cliente cli1 = new Cliente(null, "Maria Silva", "sanarafm27@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
 
 		// Colocando os telefones no cliente
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));

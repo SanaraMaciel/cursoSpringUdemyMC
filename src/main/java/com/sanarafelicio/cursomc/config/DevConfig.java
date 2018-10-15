@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.sanarafelicio.cursomc.services.DBService;
+import com.sanarafelicio.cursomc.services.EmailService;
+import com.sanarafelicio.cursomc.services.SmtpEmailService;
 
 @Configuration
 @Profile("dev")
@@ -31,9 +33,14 @@ public class DevConfig {
 		}
 		
 		dbService.instantiateTestDatabase();
-		return true;
-		
+		return true;		
 	} 
+	
+	//bean para envio de email google 	
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
+	}
 	
 	
 }
