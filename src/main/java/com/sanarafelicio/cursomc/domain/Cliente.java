@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sanarafelicio.cursomc.domain.enums.Perfil;
 import com.sanarafelicio.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -51,13 +54,21 @@ public class Cliente implements Serializable{
 	@CollectionTable(name="TELEFONE")
 	private Set<String> telefones = new HashSet<>();
 	
+	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="PERFIS")
+	private Set<Integer> perfis = new HashSet<>();
+	
 	//Associação de clientes com os pedidos 
 	@JsonIgnore
 	@OneToMany(mappedBy="cliente")
 	private List<Pedido> pedidos = new ArrayList<>(); 
 	
 	//constructors
+	
+	//adicionar para qq usuário que for criado o perfil cliente por default 
 	public Cliente() {
+		addPerfil(Perfil.CLIENTE);
 		
 	}
 
@@ -71,6 +82,7 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.senha = senha;
 		this.tipo = (tipo == null )? null : tipo.getCod();
+		addPerfil(Perfil.CLIENTE);
 	}
 
 	// getters and setters
@@ -114,7 +126,19 @@ public class Cliente implements Serializable{
 	public void setCpfOuCnpj(String cpfOuCnpj) {
 		this.cpfOuCnpj = cpfOuCnpj;
 	}
-
+	
+	//método para retornar o perfil dos clientes 
+	public Set<Perfil> getPerfis(){
+		//expressão lambda
+		return perfis.stream().map(x-> Perfil.ToEnum(x)).collect(Collectors.toSet());
+	}
+	
+	//método para adicionar um perfil ao cliente
+	public void addPerfil(Perfil perfil) {
+		perfis.add(perfil.getCod());
+	}
+	
+	
 	public TipoCliente getTipo() {
 		//para transformar o cód. em enum chamando o método da enum tipoCliente
 		return TipoCliente.ToEnum(tipo) ;
