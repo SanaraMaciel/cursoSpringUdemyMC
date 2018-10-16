@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,11 @@ import com.sanarafelicio.cursomc.services.exceptions.DataIntegrityException;
 import com.sanarafelicio.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class ClienteService {
+public class ClienteService { 
+	
+	//dependência do bean para criptografar a senha
+	@Autowired
+	private BCryptPasswordEncoder pe; 
 
 	//declarando uma dependência do objeto cliente repository para poder fazer os métodos
 	//O @Autowired é uma dependência q faz com q seja carregado automaticamente pelo spring 
@@ -82,7 +87,7 @@ public class ClienteService {
 		
 		//método auxiliar para converter de ClienteDTO para Cliente instancia uma categoria a partir de um DTO
 		public Cliente fromDTO(ClienteNewDTO objDto) {
-			Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.ToEnum(objDto.getTipo()));
+			Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.ToEnum(objDto.getTipo()),pe.encode(objDto.getSenha()));
 			Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
 			Endereco end = new Endereco(null, objDto.getLongradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
 			cli.getEnderecos().add(end);
@@ -97,7 +102,7 @@ public class ClienteService {
 		}
 		
 		public Cliente fromDTO(ClienteDTO objDto) {
-			return new Cliente(objDto.getId(),objDto.getNome(),objDto.getEmail(),null,null);	
+			return new Cliente(objDto.getId(),objDto.getNome(),objDto.getEmail(),null,null, null);	
 		}
 		
 		

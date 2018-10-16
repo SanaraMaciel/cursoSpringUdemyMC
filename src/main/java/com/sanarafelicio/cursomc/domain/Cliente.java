@@ -35,6 +35,11 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+	//json ignore para não ficar aparecendo o bcript da senha
+	@JsonIgnore
+	private String senha;
+	
+	
 	//Associação de Cliente com endereço // referência a associação feita na classe endereço no atributo cliente
 	//fazer a proteção Json Ciclica da forma que de cliente vc "pega" os endereços mas de endereços não se pega o cliente
 	//usando a notação @JsonManagedReference para fazer a proteção cíclica	
@@ -56,15 +61,28 @@ public class Cliente implements Serializable{
 		
 	}
 
-	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
+	//este construtor não é necessário ele é criado para facilitar a criação d eum obj através de uma única linha facilitando a
+	//instanciação(criação) desse obj. 
+	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
+		this.senha = senha;
 		this.tipo = (tipo == null )? null : tipo.getCod();
 	}
 
+	// getters and setters
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -153,7 +171,6 @@ public class Cliente implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
+	}	
 
 }
