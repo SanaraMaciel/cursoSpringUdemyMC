@@ -3,9 +3,13 @@ package com.sanarafelicio.cursomc.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sanarafelicio.cursomc.domain.Cliente;
 import com.sanarafelicio.cursomc.domain.ItemPedido;
 import com.sanarafelicio.cursomc.domain.PagamentoComBoleto;
 import com.sanarafelicio.cursomc.domain.Pedido;
@@ -15,6 +19,8 @@ import com.sanarafelicio.cursomc.repositories.ItemPedidoRepository;
 import com.sanarafelicio.cursomc.repositories.PagamentoRepository;
 import com.sanarafelicio.cursomc.repositories.PedidoRepository;
 import com.sanarafelicio.cursomc.repositories.ProdutoRepository;
+import com.sanarafelicio.cursomc.security.UserSS;
+import com.sanarafelicio.cursomc.services.exceptions.AuthorizationException;
 import com.sanarafelicio.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -86,6 +92,20 @@ public class PedidoService {
 		//emailService.sendOrderConfirmationEmail(obj);
 		emailService.sendOrderConfirmationHtmlEmail(obj);
 		return obj;
+	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+		
+		//obtendo o usuário logado
+		UserSS user = UserService.authenticated();
+		if(user == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		PageRequest pageRequest = new PageRequest(page, linesPerPage,Direction.valueOf(direction),orderBy);
+	
+		//retornando somente os pedidos do cliente que está logado
+		Cliente cliente = clienteRepository.findOne(user.getId());
+		return repo.findByCliente(cliente, pageRequest);
 	}
 	
 }
