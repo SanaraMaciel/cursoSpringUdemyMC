@@ -78,4 +78,9 @@ public class UserSS implements UserDetails{
 		return true;
 	}
 
+	//método para recuperar o perfil(papel) do usuário logado
+	public boolean hasRole(Perfil perfil) {
+		return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao()));
+	}
+	
 }

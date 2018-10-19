@@ -14,11 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sanarafelicio.cursomc.domain.Cidade;
 import com.sanarafelicio.cursomc.domain.Cliente;
 import com.sanarafelicio.cursomc.domain.Endereco;
+import com.sanarafelicio.cursomc.domain.enums.Perfil;
 import com.sanarafelicio.cursomc.domain.enums.TipoCliente;
 import com.sanarafelicio.cursomc.dto.ClienteDTO;
 import com.sanarafelicio.cursomc.dto.ClienteNewDTO;
 import com.sanarafelicio.cursomc.repositories.ClienteRepository;
 import com.sanarafelicio.cursomc.repositories.EnderecoRepository;
+import com.sanarafelicio.cursomc.security.UserSS;
+import com.sanarafelicio.cursomc.services.exceptions.AuthorizationException;
 import com.sanarafelicio.cursomc.services.exceptions.DataIntegrityException;
 import com.sanarafelicio.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -38,6 +41,14 @@ public class ClienteService {
 	private EnderecoRepository enderecoRepository;
 		
 	public Cliente find(Integer id) {
+		
+		//Adicionando restrição para o cliente só poder recuperar o perfil dele mesmo
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
+		
 		Cliente obj = repo.findOne(id);
 		if (obj == null) {
 		throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id
