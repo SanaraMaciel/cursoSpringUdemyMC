@@ -54,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	//vetor para definir quais caminhos de gravação como cadastro  
 		private static final String[] PUBLIC_MATCHERS_POST = {
-				"/clientes/**"
+				"/clientes/**",
+				"/auth/forgot/**"
 		};
 	
 	//configuração de permissão de url 
