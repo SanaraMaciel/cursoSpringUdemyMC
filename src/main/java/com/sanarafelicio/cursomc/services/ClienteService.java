@@ -159,7 +159,7 @@ public class ClienteService {
 			 
 			return s3Service.uploadFile(imgService.getInputStream(jpgImage,"jpg"), fileName,"image");
 			
-			//usado para salcar a url da imagem no banco
+			//usado para salvar a url da imagem no banco
 			//URI uri =  s3Service.uploadFile(multipartFile);
 			//pega o id do cliente logado e cria um cliente com ele
 			//Cliente cli = repo.findOne(user.getId());
