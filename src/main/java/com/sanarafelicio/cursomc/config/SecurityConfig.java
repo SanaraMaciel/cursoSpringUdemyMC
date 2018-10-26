@@ -48,8 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	//vetor para definir quais caminhos somente leitura  
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos/**",
-			"/categorias/**"
-			
+			"/categorias/**",
+			"/estados/**"			
 	}; 
 	
 	//vetor para definir quais caminhos de gravação como cadastro  
