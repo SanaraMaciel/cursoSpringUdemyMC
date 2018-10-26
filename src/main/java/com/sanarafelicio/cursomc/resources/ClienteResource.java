@@ -32,13 +32,21 @@ public class ClienteResource {
 	@Autowired
 	private ClienteService service;
 	
-	
+	//buscar por id
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		
 		Cliente obj = service.find(id);		
 		return ResponseEntity.ok().body(obj);			
 		}
+	
+	//buscar por email
+	@RequestMapping(value="/email", method=RequestMethod.GET)
+	public ResponseEntity<?> find(@RequestParam(value="value") String email) {		
+		Cliente obj = service.findByEmail(email);		
+		return ResponseEntity.ok().body(obj);			
+		}
+	
 	
 	//inserir um cliente
 		@RequestMapping(method=RequestMethod.POST) //@RequestBidy faz o Json ser convertido para obj java
